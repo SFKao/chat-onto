@@ -1,34 +1,35 @@
 name: Release
-on: [push]
+on: [ push ]
 
 jobs:
   release:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-22.04, windows-latest]
+        platform: [ ubuntu-22.04, windows-latest ]
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+    - uses: actions/checkout@v4
 
-      - name: Install Linux dependencies
-        if: matrix.platform == 'ubuntu-22.04'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libayatana-appindicator3-dev libreproducible-builds-html-parser-utils-perl
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
 
-      - name: Install Frontend Deps
-        run: npm install
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
 
-      - name: Build App
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Find this step in your .github/workflows/build.yml file:
+    - name: Install Linux dependencies
+      if: matrix.platform == 'ubuntu-22.04'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libayatana-appindicator3-dev
+
+    - name: Install Frontend Deps
+      run: npm install
+
+    - name: Build App
+      uses: tauri-apps/tauri-action@v0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
