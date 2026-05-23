@@ -1,0 +1,36 @@
+# --- Node.js / Frontend ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Frontend Build Output (Matches your distDir configuration)
+dist/
+build/
+
+# --- Rust / Tauri Backend ---
+src-tauri/target/
+
+# Tauri generated bundle outputs (if built locally)
+src-tauri/gen/
+
+# --- Operating System Files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.zip
+
+# --- IDEs and Editors ---
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
