@@ -45,3 +45,4 @@ jobs:
         NO_STRIP: true
       with:
         includeRelease: true
+        args: --verbose
