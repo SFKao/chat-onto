@@ -29,10 +29,9 @@ jobs:
       run: npm install
 
     - name: Build App
-      uses: tauri-apps/tauri-action@v0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        # In v2, this automatically packages and saves your portables 
-        # as downloaded action artifacts if a GitHub release tag isn't found
-        includeRelease: true
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NO_STRIP: true 
+        with:
+          includeRelease: true

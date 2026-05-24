@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useChat } from "./hooks/useChat";
-import { collapseWindow, expandWindow, startDragging } from "./hooks/useWindow";
+import { collapseWindow, expandWindow, loginWindow, startDragging } from "./hooks/useWindow";
 import LoginScreen  from "./components/LoginScreen";
 import ChatScreen   from "./components/ChatScreen";
 import CollapsedTab from "./components/CollapsedTab";
@@ -14,8 +14,20 @@ export default function App() {
   const collapsedRef = useRef(false);
   const prevLenRef   = useRef(0);
 
+  const isConnecting = status === "connecting" || status === "authenticating";
+  const showChat     = status === "connected"  || status === "disconnected" || status === "error";
+
+  // Ajustar tamaño de ventana según la pantalla activa
+  useEffect(() => {
+    if (collapsed) return;
+    if (showChat) {
+      expandWindow();
+    } else {
+      loginWindow();
+    }
+  }, [showChat, collapsed]);
+
   useEffect(() => { collapsedRef.current = collapsed; }, [collapsed]);
-  useEffect(() => { expandWindow(); }, []);
 
   useEffect(() => {
     const prev    = prevLenRef.current;
@@ -35,12 +47,8 @@ export default function App() {
   async function handleExpand() {
     setCollapsed(false);
     setUnread(0);
-    await expandWindow();
+    // expandWindow se dispara por el efecto de arriba al cambiar collapsed
   }
-
-  // auth_failed vuelve a mostrar el login con el error
-  const isConnecting = status === "connecting" || status === "authenticating";
-  const showChat     = status === "connected" || status === "disconnected" || status === "error";
 
   if (collapsed) {
     return <CollapsedTab unread={unread} onClick={handleExpand} />;

@@ -20,15 +20,11 @@ function initials(name = "") {
 }
 
 const S = `
-  /*
-   * drag-shell: área de agarre invisible alrededor del widget.
-   * 8px de padding = borde fácil de agarrar en cualquier lado.
-   */
+  /* drag-shell ocupa toda la ventana sin padding — sin borde transparente */
   .drag-shell {
     height: 100%;
-    padding: 8px;
+    position: relative;
     cursor: grab;
-    box-sizing: border-box;
   }
   .drag-shell:active { cursor: grabbing; }
 
@@ -42,12 +38,21 @@ const S = `
     border: 1px solid var(--border);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow:
-      0 16px 60px rgba(0,0,0,.65),
-      0 0 0 1px rgba(124,106,247,.10),
-      /* Halo exterior suave que refuerza visualmente los bordes arrastrables */
-      0 0 0 8px rgba(124,106,247,.03);
+    box-shadow: 0 16px 60px rgba(0,0,0,.65), 0 0 0 1px rgba(124,106,247,.10);
   }
+
+  /* Franjas invisibles de arrastre en los 3 bordes laterales (6px).
+     Están sobre el widget pero debajo de los elementos interactivos. */
+  .drag-edge {
+    position: absolute;
+    z-index: 10;
+    cursor: grab;
+  }
+  .drag-edge:active { cursor: grabbing; }
+  .drag-edge-top    { top: 0;    left: 6px;  right: 6px; height: 6px; }
+  .drag-edge-left   { top: 0;    left: 0;    width: 6px; bottom: 0;   }
+  .drag-edge-right  { top: 0;    right: 0;   width: 6px; bottom: 0;   }
+  .drag-edge-bottom { bottom: 0; left: 6px;  right: 6px; height: 6px; }
 
   /* Zona interactiva: cancela el drag */
   .no-drag { cursor: default; }
@@ -199,6 +204,11 @@ export default function ChatScreen({ messages, status, myName, onSend, onCollaps
       <style>{S}</style>
       {/* El shell exterior captura el drag desde cualquier borde */}
       <div className="drag-shell" onMouseDown={onDragStart}>
+        {/* Franjas de arrastre en bordes — no tapan el contenido */}
+        <div className="drag-edge drag-edge-top"    onMouseDown={onDragStart}/>
+        <div className="drag-edge drag-edge-left"   onMouseDown={onDragStart}/>
+        <div className="drag-edge drag-edge-right"  onMouseDown={onDragStart}/>
+        <div className="drag-edge drag-edge-bottom" onMouseDown={onDragStart}/>
         <div className="chat-widget">
 
           <div className="cw-top">
