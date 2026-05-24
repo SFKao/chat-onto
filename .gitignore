@@ -34,3 +34,4 @@ desktop.ini
 *.njsproj
 *.sln
 *.swp
+package-lock.json

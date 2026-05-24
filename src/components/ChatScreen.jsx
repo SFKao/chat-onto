@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { closeApp } from "../hooks/useWindow";
 
 function formatTime(date) {
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
